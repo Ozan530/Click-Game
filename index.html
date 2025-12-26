@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sen Ne Çıkacaksın?</title>
+<title>Sen Ne Çıkacaksın? 😎</title>
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -35,8 +35,41 @@
   #result {
     font-size: 1.8em;
     color: #222;
-    min-height: 2em;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     transition: all 0.5s;
+  }
+  #result img {
+    max-width: 200px;
+    margin-top: 10px;
+    border-radius: 12px;
+  }
+  .share-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+  }
+  .share-buttons a {
+    text-decoration: none;
+    font-size: 1.2em;
+    padding: 10px 15px;
+    background: #25d366;
+    color: white;
+    border-radius: 8px;
+    transition: 0.3s;
+  }
+  .share-buttons a:hover {
+    background: #128c7e;
+  }
+  .twitter-share {
+    background: #1da1f2;
+  }
+  .twitter-share:hover {
+    background: #0d95e8;
   }
 </style>
 </head>
@@ -46,27 +79,48 @@
 <button onclick="generate()">Sonucunu Gör!</button>
 <div id="result"></div>
 
+<div class="share-buttons">
+  <a id="whatsapp" target="_blank">WhatsApp</a>
+  <a id="twitter" class="twitter-share" target="_blank">Twitter</a>
+</div>
+
+<audio id="boing-sound">
+  <source src="https://www.soundjay.com/buttons/sounds/button-16.mp3" type="audio/mpeg">
+</audio>
+
 <script>
 const results = [
-  "Sen bir gizli süper kahramansın! 🦸‍♂️",
-  "Bugün çok şanslısın! 🍀",
-  "Senin gizli yeteneğin: Uzaylı taklidi 👽",
-  "Bugün bir sihirbaz günü! ✨",
-  "Sen bir gizemli ajan oldun! 🕵️‍♂️",
-  "Bugün kendini dans etmeye hazır hissedeceksin! 💃",
-  "Senin ruhun bir panda! 🐼",
-  "Bugün her şey mümkün! 🚀"
+  {text: "Sen bir gizli süper kahramansın! 🦸‍♂️", img: "https://i.imgur.com/1XyXj5B.gif"},
+  {text: "Bugün çok şanslısın! 🍀", img: "https://i.imgur.com/OH7RV3k.gif"},
+  {text: "Senin gizli yeteneğin: Uzaylı taklidi 👽", img: "https://i.imgur.com/FhQ9z6R.gif"},
+  {text: "Bugün bir sihirbaz günü! ✨", img: "https://i.imgur.com/pdQfK0M.gif"},
+  {text: "Sen bir gizemli ajan oldun! 🕵️‍♂️", img: "https://i.imgur.com/vtF0R0m.gif"},
+  {text: "Bugün kendini dans etmeye hazır hissedeceksin! 💃", img: "https://i.imgur.com/3Dh6M1P.gif"},
+  {text: "Senin ruhun bir panda! 🐼", img: "https://i.imgur.com/eLQ3s4L.gif"},
+  {text: "Bugün her şey mümkün! 🚀", img: "https://i.imgur.com/MKXwUuF.gif"}
 ];
 
 function generate() {
   const randomIndex = Math.floor(Math.random() * results.length);
   const resultDiv = document.getElementById("result");
+  const result = results[randomIndex];
+
+  // ses efekti
+  const sound = document.getElementById("boing-sound");
+  sound.currentTime = 0;
+  sound.play();
 
   // animasyon efekti
   resultDiv.style.opacity = 0;
   setTimeout(() => {
-    resultDiv.textContent = results[randomIndex];
+    resultDiv.innerHTML = `<div>${result.text}</div><img src="${result.img}" alt="GIF">`;
     resultDiv.style.opacity = 1;
+
+    // paylaş linklerini güncelle
+    const shareText = encodeURIComponent(result.text + " Denemelisin!");
+    const url = encodeURIComponent(window.location.href);
+    document.getElementById("whatsapp").href = `https://api.whatsapp.com/send?text=${shareText} ${url}`;
+    document.getElementById("twitter").href = `https://twitter.com/intent/tweet?text=${shareText}&url=${url}`;
   }, 300);
 }
 </script>
